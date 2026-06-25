@@ -15,7 +15,7 @@ dseg    segment para public 'data'
     ; --- DEFINICAO DE VARIAVEIS ---
     alunos      dw 101, 102, 103, 104, 0
     notas       db 14,  8,   19,  7
-    total       db 0
+    total       db 0                ; total de alunos
     reprovados  db 0
     media       dw 0                ; resultado da media
     n_passaram  db 0                ; divisor para calcular a media
@@ -43,10 +43,18 @@ inicio:
     cmp ax, 0
     JE obter_media
 
-    int total
+    inc total
 
     ; vamos comparar as notas
     mov bl, notas[DI]
+
+    cmp bl, melhor_nota
+    JBE pulo1
+
+    mov melhor_nota, bl
+    mov melhor_aluno, alunos[SI]
+
+pulo1:
 
     cmp bl, 10
     jb add_reprovado
