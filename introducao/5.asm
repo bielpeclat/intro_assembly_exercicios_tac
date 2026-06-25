@@ -17,9 +17,11 @@ dseg    segment para public 'data'
     notas       db 14,  8,   19,  7
     total       db 0
     reprovados  db 0
-    media       dw 0 ; resultado da media
-    n_passaram  db 0 ; divisor para calcular a media
-    soma        dw 0 ; acumulador para media
+    media       dw 0                ; resultado da media
+    n_passaram  db 0                ; divisor para calcular a media
+    soma        dw 0                ; acumulador para media
+    melhor_nota db -1               ; guardar valor da maior nota
+    melhor_aluno db -1              ; id do aluno com maior nota
 
 dseg    ends
 
@@ -41,7 +43,7 @@ inicio:
     cmp ax, 0
     JE obter_media
 
-    add total, 1
+    int total
 
     ; vamos comparar as notas
     mov bl, notas[DI]
@@ -58,7 +60,7 @@ inicio:
     JMP proximo
 
 add_reprovado:
-    add reprovados, 1
+    inc reprovados
     jmp proximo
 
 proximo:
@@ -74,6 +76,7 @@ obter_media:
     mov AX, soma
     mov BL, n_passaram
     div BL
+
     xor ah, ah
     mov media, ax
 
